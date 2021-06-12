@@ -5,6 +5,7 @@
         <meta charset="utf-8" />
         <title>Cine World</title>
 	 <link rel="shortcut icon" href="../../assets/images/icons/logo_icone.svg" type="image/svg" />
+
 	<meta name="description" content="Home do Cine Wolrd, o mundo do cinema como você nunca viu e na sua mão" />
 	<meta name="keywords" content="filme livro série " />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
