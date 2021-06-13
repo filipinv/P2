@@ -49,8 +49,8 @@
                     </div>
                     <div id="menu_superior_direita">
                         <span class="pesquisar_icon">
-                            <form onsubmit="pesquisar ()">
-                                <input onsubmit="pesquisar ();" id="pesquisar_input" type="text" placeholder="Busca" style="font-size: 20px; display: inline-table;" />
+                            <form method="GET" action="produtos/busca.php">
+                                <input name="q" id="pesquisar_input" type="text" placeholder="Busca" style="font-size: 20px; display: inline-table;" />
                             </form>
                             <img src="../../assets/images/icons/search_black_24dp.svg" type="image/svg" alt="Ícone de pesquisa" />
                         </span>
@@ -75,9 +75,9 @@
                                 <a class="nav-link btn dropdown-toggle" href="#" role="button" id="dropdownProdutos" data-bs-toggle="dropdown" aria-expanded="false">Produtos</a>
 
                                 <ul id="lista_produtos" class="dropdown-menu" aria-labelledby="dropdownProdutos">
-                                    <li><a class="dropdown-item" href="produtos/filmes.php">Filmes</a></li>
-                                    <li><a class="dropdown-item" href="produtos/livros.php">Livros</a></li>
-                                    <li><a class="dropdown-item" href="produtos/séries.php">Séries</a></li>
+                                    <li><a class="dropdown-item" href="produtos/produtos.php?cod=1">Filmes</a></li>
+                                    <li><a class="dropdown-item" href="produtos/produtos.php?cod=2">Livros</a></li>
+                                    <li><a class="dropdown-item" href="produtos/produtos.php?cod=3">Séries</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -111,10 +111,10 @@
 
                             <div class="carousel-item active">
                                 <div id="op_box" style="position: relative;">
-                                    <img src="../../assets/images/products/filmes/piratas1.jpg" type="image/jpg" alt="Piratas do caribe - A Maldição do Pérola Negra">
+                                    <img src="../../assets/images/products/filmes/12.jpg" type="image/jpg" alt="Piratas do caribe - A Maldição do Pérola Negra">
                                     <div class="back_image">
                                         <div class="conteudo_image">
-                                            <a target="new" href="produtos/filmes/piratas_caribe.php">Mais Detalhes</a>
+                                            <a target="new" href="produtos/detalhe.php?cod=12">Mais Detalhes</a>
                                         </div>
                                     </div>
                                 </div>
@@ -127,10 +127,10 @@
 
                             <div class="carousel-item">
                                 <div id="op_box" style="position: relative;">
-                                    <img src="../../assets/images/products/filmes/harry3.jpg" type="image/jpg" alt="Piratas do caribe - A Maldição do Pérola Negra">
+                                    <img src="../../assets/images/products/filmes/13.jpg" type="image/jpg" alt="Piratas do caribe - A Maldição do Pérola Negra">
                                     <div class="back_image">
                                         <div class="conteudo_image">
-                                            <a target="new" href="produtos/filmes/harry_potter3.php">Mais Detalhes</a>
+                                            <a target="new" href="produtos/detalhe.php?cod=13">Mais Detalhes</a>
                                         </div>
                                     </div>
                                 </div>
@@ -143,10 +143,10 @@
 
                             <div class="carousel-item">
                                 <div id="op_box" style="position: relative;">
-                                    <img src="../../assets/images/products/séries/gotseason8.jpg" type="image/jpg" alt="Decorativo rei">
+                                    <img src="../../assets/images/products/séries/32.jpg" type="image/jpg" alt="Decorativo rei">
                                     <div class="back_image">
                                         <div class="conteudo_image">
-                                            <a target="new" href="produtos/séries/got8.php">Mais Detalhes</a>
+                                            <a target="new" href="produtos/detalhe.php?cod=32">Mais Detalhes</a>
                                         </div>
                                     </div>
                                 </div>
@@ -159,10 +159,10 @@
 
                             <div class="carousel-item">
                                 <div id="op_box" style="position: relative;">
-                                    <img src="../../assets/images/products/livros/it.jpg" type="image/jpg" alt="Chaveiro rei">
+                                    <img src="../../assets/images/products/livros/21.jpg" type="image/jpg" alt="Chaveiro rei">
                                     <div class="back_image">
                                         <div class="conteudo_image">
-                                            <a target="new" href="produtos/livros/it_coisa.php">Mais Detalhes</a>
+                                            <a target="new" href="produtos/detalhe.php?cod=21">Mais Detalhes</a>
                                         </div>
                                     </div>
                                 </div>
@@ -199,9 +199,9 @@
                         </div>
                         <div id="s_col">
                             <ul>
-                               <li><a href="produtos/filmes.php">Filmes</a></li>
-                                <li><a href="produtos/livros.php">Livros</a></li>
-                                <li><a href="produtos/séries.php">Séries</a></li>
+                               <li><a href="produtos/produtos.php?cod=1">Filmes</a></li>
+                                <li><a href="produtos/produtos.php?cod=2">Livros</a></li>
+                                <li><a href="produtos/produtos.php?cod=3">Séries</a></li>
                             </ul>
                         </div>
                     </div>

@@ -7,6 +7,32 @@
         $codigo = $_SESSION["codCliente"];
     }
 
+    if (!isset ($_GET["cod"])) {
+        header ("location: ../home.php");
+        exit ();
+    }
+
+    $categoria = $_GET["cod"];
+
+    try {
+
+        $conexao = new mysqli ("localhost", "root", "", "cineworld");
+
+        $sql = "SELECT p.titulo, p.imagem, p.codigo
+        FROM produto p
+        WHERE p.categoria=$categoria";
+
+        $resultado = $conexao-> query ($sql);
+        
+    }
+    catch (Exception $e) {
+        echo $e->getMessage ();
+    }
+
+    function selectorCategorias (int $i) {
+        return fmod ($i,3) + 1;
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +40,7 @@
 
     <head>
         <meta charset="utf-8" />
-        <title>Cine World - Séries</title>
+        <title>Cine World</title>
         <link rel="shortcut icon" href="../../../assets/images/icons/logo_icone.svg" type="image/svg" />
         <meta name="description" content="Escolha qual será sua próxima série" />
         <meta name="keywords" content="filmes loja séries nostalgia comprar" />
@@ -43,8 +69,8 @@
                     </div>
                     <div id="menu_superior_direita">
                         <span class="pesquisar_icon">
-                            <form onsubmit="pesquisar ()">
-                                <input onsubmit="pesquisar ();" id="pesquisar_input" type="text" placeholder="Busca" style="font-size: 20x; display: inline-table;" />
+                        <form method="GET" action="busca.php">
+                                <input name="q" id="pesquisar_input" type="text" placeholder="Busca" style="font-size: 20px; display: inline-table;" />
                             </form>
                             <img src="../../../assets/images/icons/search_black_24dp.svg" type="image/svg" alt="Ícone de pesquisa" />
                         </span>
@@ -67,11 +93,10 @@
                         <li id="link_produtos" class="nav-item">
                             <div class="dropdown">
                                 <a class="nav-link btn dropdown-toggle" href="#" role="button" id="dropdownProdutos" data-bs-toggle="dropdown" aria-expanded="false">Produtos</a>
-
-                                 <ul id="lista_produtos" class="dropdown-menu" aria-labelledby="dropdownProdutos">
-                                    <li><a class="dropdown-item" href="filmes.php">Filmes</a></li>
-                                    <li><a class="dropdown-item" href="livros.php">Livros</a></li>
-                                    <li><a class="dropdown-item" href="séries.php">Séries</a></li>
+                                <ul id="lista_produtos" class="dropdown-menu" aria-labelledby="dropdownProdutos">
+                                    <li><a class="dropdown-item" href="produtos.php?cod=1">Filmes</a></li>
+                                    <li><a class="dropdown-item" href="produtos.php?cod=2">Livros</a></li>
+                                    <li><a class="dropdown-item" href="produtos.php?cod=3">Séries</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -98,27 +123,45 @@
 
             <main>
                 <div id="conteudo" class="prod liv">
-                    <p style="text-align: center;">Séries</p>
-                    <div id="pri_col">
-                        <div class="card">
-                            <div class="card-body" style="text-align: center;">
-                                <h5 class="card-title">Supernatural (15ª temporada)</h5>
-                                <img src="../../../assets/images/products/séries/supernatural15.jpg" type="image/jpg" alt="Supernatural (15ª temporada)" />
-                                <p class="card-text">Assista Agora!</p>
-                                <a href="séries/supernatural15.php" class="btn">Detalhes</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="seg_col">
-                        <div class="card">
-                            <div class="card-body" style="text-align: center;">
-                                <h5 class="card-title">Game Of Thrones (8ª temporada)</h5>
-                                <img src="../../../assets/images/products/séries/gotseason8.jpg" type="image/jpg" alt="Game Of Thrones (8ª temporada)" />
-                                <p class="card-text">Assista Agora!</p>
-                                <a href="séries/got8.php" class="btn">Detalhes</a>
-                            </div>
-                        </div>
-                    </div>
+                    <p style="text-align: center;">
+                    <?php 
+                        switch ($categoria) {
+                            case 1: echo "Filmes"; break;
+                            case 2: echo "Livros"; break;
+                            case 3: echo "Séries"; break;
+                        }
+                    ?>
+                   </p>
+                    <?php
+                        $i = 0;
+                        while ($linha = $resultado->fetch_assoc ()) {
+
+                            $titulo = $linha["titulo"];
+                            $imagem = $linha["imagem"];
+                            $codProd = $linha["codigo"];
+
+                            switch (selectorCategorias($i)) {
+                                case 1: $classe = "pri_col"; break;
+                                case 2: $classe = "seg_col"; break;
+                                case 3: $classe = "ter_col"; break;
+                            }
+
+                            echo "<div id='$classe'>
+                                <div class='card'>
+                                    <div class='card-body' style='text-align: center;'>
+                                        <h5 class='card-title'>$titulo</h5>
+                                        <img src='$imagem' alt='Supernatural (15ª temporada)' />
+                                        <p class='card-text'>Assista Agora!</p>
+                                        <a href='detalhe.php?cod=$codProd' class='btn'>Detalhes</a>
+                                    </div>
+                                </div>
+                            </div>";
+
+                            $i++;
+                        }
+
+                        
+                    ?>
                 </div>
             </main>
 
@@ -126,10 +169,7 @@
                 <div id="rodape" class="home_rodape">
                     <div id="conteudo_rodape">
                         <div id="p_col">
-                              <ul>
-
-
-                            </ul>
+                            <ul></ul>
                         </div>
                         <div id="s_col">
                             <ul>
@@ -143,12 +183,11 @@
             </footer>
         </div>
     </body>
-
 </html>
 
 <script lang="javascript">
 
-$("#link_produtos").mouseenter( function () {
+    $("#link_produtos").mouseenter( function () {
         $("#lista_produtos").toggle();
     });
 
@@ -231,10 +270,10 @@ $("#link_produtos").mouseenter( function () {
     })
 
     $(".pesquisar_icon").click ( function () {
-            var busca = document.getElementById("pesquisar_input");
-            busca.value = "";
-            $("#pesquisar_input").fadeIn(100);
-            $("#pesquisar_input").focus();
+        var busca = document.getElementById("pesquisar_input");
+        busca.value = "";
+        $("#pesquisar_input").fadeIn(100);
+        $("#pesquisar_input").focus();
     })
 
     $(document).on("click", function (event) {
@@ -254,3 +293,7 @@ $("#link_produtos").mouseenter( function () {
         alert(busca.value);
     }
 </script>
+
+<?php
+    $conexao->close ();
+?>

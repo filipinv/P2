@@ -44,8 +44,8 @@
                     </div>
                     <div id="menu_superior_direita">
                         <span class="pesquisar_icon">
-                            <form onsubmit="pesquisar ()">
-                                <input onsubmit="pesquisar ();" id="pesquisar_input" type="text" placeholder="Busca" style="font-size: 20px; display: inline-table;" />
+                            <form method="GET" action="produtos/busca.php">
+                                <input name="q" id="pesquisar_input" type="text" placeholder="Busca" style="font-size: 20px; display: inline-table;" />
                             </form>
                             <img src="../../assets/images/icons/search_black_24dp.svg" type="image/svg" alt="Ícone de pesquisa" />
                         </span>
@@ -70,9 +70,9 @@
                                 <a class="nav-link btn dropdown-toggle" href="#" role="button" id="dropdownProdutos" data-bs-toggle="dropdown" aria-expanded="false">Produtos</a>
 
                                 <ul id="lista_produtos" class="dropdown-menu" aria-labelledby="dropdownProdutos">
-                                    <li><a class="dropdown-item" href="produtos/filmes.php">Filmes</a></li>
-                                    <li><a class="dropdown-item" href="produtos/livros.php">Livros</a></li>
-                                    <li><a class="dropdown-item" href="produtos/séries.php">Séries</a></li>
+                                    <li><a class="dropdown-item" href="produtos/produtos.php?cod=1">Filmes</a></li>
+                                    <li><a class="dropdown-item" href="produtos/produtos.php?cod=2">Livros</a></li>
+                                    <li><a class="dropdown-item" href="produtos/produtos.php?cod=3">Séries</a></li>
                            </ul>
                          </div>
                         </li>
@@ -136,7 +136,7 @@
                             <div class="card-header" style="background-color: #81b3ac;">
                                 Compra 
                             </div>
-                            <div class="card-body" 
+                            <div class="card-body"> 
                                 <p class="card-text" style="background-color: ##81b3ac;">Preço Total: R$ 130,77</p>
                                 <a target="new" href="carrinho/carrinho2.php" class="btn" style="background-color: red;">Limpar</a>
                                 <a href="#" class="btn" style="background-color: yellow;">Finalizar</a>
@@ -158,7 +158,7 @@
                             <ul>
                                <li><a href="home.php">Home</a></li>
                                 <li><a href="conta/entrar.php">Conta</a></li>
-                                <li><a href="produtos/livros.php">Livros</a></li>
+                                <li><a href="produtos/produtos.php?cod=2">Livros</a></li>
                             </ul>
                         </div>
                     </div>

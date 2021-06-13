@@ -1,14 +1,51 @@
+<?php
+    
+    session_start ();
+
+    if (isset ($_SESSION["codCliente"])) {
+        $cliente = $_SESSION["cliente"];
+        $codigo = $_SESSION["codCliente"];
+    }
+
+    if (!isset ($_GET["cod"])) {
+        header ("location: ../home.php");
+        exit ();
+    }
+
+    $codProd = $_GET["cod"];
+
+    try {
+        $conexao = new mysqli ("localhost", "root", "", "cineworld");
+
+        $sql = "SELECT p.titulo, p.descritivo, p.valor, p.imagem
+        FROM produto p WHERE p.codigo=$codProd;";
+
+        $resultado = $conexao->query ($sql);
+
+        $linha = $resultado->fetch_assoc ();
+
+        $titulo = $linha["titulo"];
+        $descritivo = $linha["descritivo"];
+        $valor = $linha["valor"];
+        $imagem = $linha["imagem"];
+    }
+    catch (Exception $e) {
+        echo $e->getMessage ();
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
     <head>
         <meta charset="utf-8" />
-        <title>A Culpa É das Estrelas</title>
-        <link rel="shortcut icon" href="../../../../assets/images/icons/logo_icone.svg" type="image/svg" />
-        <meta name="description" content="A Culpa É das Estrelas!" />
-        <meta name="keywords" content="cinema loja livros romance adolescencia aprendizado drama" />
+        <title>Duro de Matar</title>
+        <link rel="shortcut icon" href="../../../assets/images/icons/logo_icone.svg" type="image/svg" />
+        <meta name="description" content="Duro de Matar!" />
+        <meta name="keywords" content="filmes loja ação bruce willis policial" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" href="../../../styles/estrutura_produtosl.css" />
+        <link rel="stylesheet" href="../../styles/estrutura_produtos.css" />
         <!-- JQuery -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
         <!-- Inserção do Bootstrap -->
@@ -26,49 +63,59 @@
             <header>
                 <div id="cabecalho">
                     <div id="menu_superior_esquerda">
-                        <a href="../../home.php">
-                            <img src="../../../../assets/images/icons/logo_icone.svg" type="image/svg" alt="Logomarca" />
-                            Cine Wolrd
+                        <a href="../home.php">
+                            <img src="../../../assets/images/icons/logo_icone.svg" type="image/svg" alt="Logomarca" />
+                            Cine World
                         </a>
                     </div>
                     <div id="menu_superior_direita">
                         <span class="pesquisar_icon">
-                            <form onsubmit="pesquisar ()">
-                                <input onsubmit="pesquisar ();" id="pesquisar_input" type="text" placeholder="Busca" style="font-size: 15x; display: inline-table;" />
+                        <form method="GET" action="busca.php">
+                                <input name="q" id="pesquisar_input" type="text" placeholder="Busca" style="font-size: 20px; display: inline-table;" />
                             </form>
-                            <img src="../../../../assets/images/icons/search_black_24dp.svg" type="image/svg" alt="Ícone de pesquisa" />
+                            <img src="../../../assets/images/icons/search_black_24dp.svg" type="image/svg" alt="Ícone de pesquisa" />
                         </span>
-                        <a href="../../conta/entrar.php">
-                            <img src="../../../../assets/images/icons/account_circle_black_24dp.svg" type="image/svg" alt="Ícone do usuário" />
-                            Login
+                        <a href="../conta/entrar.php">
+                            <img src="../../../assets/images/icons/account_circle_black_24dp.svg" type="image/svg" alt="Ícone do usuário" />
+                            <?php
+                                if (isset ($codigo))
+                                    echo $cliente;
+                                else
+                                    echo "Login";
+                            ?>
                         </a>
                     </div>
                 </div>
                 <div id="menu_navegacao">
                     <ul class="nav justify-content-center">
                         <li id="link_home" class="nav-item">
-                            <a class="nav-link" href="../../home.php">Home</a>
+                            <a class="nav-link" href="../home.php">Home</a>
                         </li>
                         <li id="link_produtos" class="nav-item">
                             <div class="dropdown">
                                 <a class="nav-link btn dropdown-toggle" href="#" role="button" id="dropdownProdutos" data-bs-toggle="dropdown" aria-expanded="false">Produtos</a>
 
                                 <ul id="lista_produtos" class="dropdown-menu" aria-labelledby="dropdownProdutos">
-                                    <li><a class="dropdown-item" href="../filmes.php">Filmes</a></li>
-                                    <li><a class="dropdown-item" href="../livros.php">Livros</a></li>
-                                    <li><a class="dropdown-item" href="../séries.php">Séries</a></li>
+                                    <li><a class="dropdown-item" href="produtos.php?cod=1">Filmes</a></li>
+                                    <li><a class="dropdown-item" href="produtos.php?cod=2">Livros</a></li>
+                                    <li><a class="dropdown-item" href="produtos.php?cod=3">Séries</a></li>
                                 </ul>
                             </div>
                         </li>
                         <li id="link_carrinho" class="nav-item">
-                            <a class="nav-link" href="../../carrinho.php">Carrinho</a>
+                            <a class="nav-link" href="../carrinho.php">Carrinho</a>
                         </li>
                         <li id="link_conta" class="nav-item">
                             <div class="dropdown">
                                 <a class="nav-link btn dropdown-toggle" href="#" role="button" id="dropdownConta" data-bs-toggle="dropdown" aria-expanded="false">Conta</a>
                                 <ul id="lista_usuario" class="dropdown-menu" aria-labelledby="dropdownConta">
-                                    <li><a class="dropdown-item" href="../../conta/entrar.php">Entrar</a></li>
-                                    <li><a class="dropdown-item" href="#">Sair</a></li>
+                                <?php 
+                                    if (isset ($codigo))
+                                        echo "<li><a class='dropdown-item' href='../conta/logout.php'>Sair</a></li>";
+                                    else
+                                        echo "<li><a class='dropdown-item' href='../conta/entrar.php'>Entrar</a></li>";
+
+                                ?>
                                 </ul>
                             </div>
                         </li>
@@ -78,9 +125,9 @@
 
             <main>
                 <div id="conteudo">
-                    <p style="text-align: center;">A Culpa É das Estrelas</p>
+                    <p style="text-align: center;"><?php echo $titulo; ?></p>
                     <div class="pri_col">
-                        <img src="../../../../assets/images/products/livros/estrelas.jpg" type="image/jpg" alt="A Culpa É das Estrelas" />
+                        <img src="<?php echo $imagem; ?>" type="image/jpg" alt="Duro de Matar" />
                     </div>
                     <div class="seg_col">
                         <div class="card">
@@ -88,9 +135,9 @@
                                Detalhes
                             </div>
                             <div class="card-body" style="background-color: #81b3ac;">
-                                <h5 class="card-title">Preço: R$ 29,45</h5>
+                                <h5 class="card-title">Preço: R$ <?php echo $valor; ?></h5>
                                 <form> 
-                                      <label class="form-label" >Frete: 5,89 </label><br />
+                                      <label class="form-label" >Frete: Grátis </label><br />
 				      <label class="form-label" for="qntdComprar">Quantidade: </label>
 				      <input type="number" min="0" max="99" step="1" id="qntdComprar" /> <br />
 				    <button type="submit" class="btn mt-3" style="background-color: yellow;">Comprar</button>
@@ -99,39 +146,18 @@
                         </div>
                     </div>
                     <div class="ter_col">
-                        <table class="table caption-top table-striped table-hover">
-                            <caption>Características principais</caption>
-                            <tbody>
-                                <tr scope="row">
-                                    <td>Título do livro</td>
-                                    <td>A Culpa É das Estrelas</td>
-                                </tr>
-                                <tr scope="row">
-                                    <td>Autor</td>
-                                    <td>John Green</td>
-                                </tr>
-                                <tr scope="row">
-                                    <td>Idioma</td>
-                                    <td>Português</td>
-                                </tr>
-                                <tr scope="row">
-                                    <td>Editora</td>
-                                    <td>Intrinseca</td>
-                                </tr>
-                                <tr scope="row">
-                                    <td>Formato</td>
-                                    <td>Papel</td>
-                                </tr>
-				<tr scope="row">
-                                    <td>Marca</td>
-                                    <td>Intrinseca</td>
-                                </tr>
-				<tr scope="row">
-                                    <td>Modelo</td>
-                                    <td>9788580572261</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="card">
+                        <p class="card-title">
+                            <?php 
+                                echo "<h3>Características do produto</h3>";
+                            ?>
+                        </p>
+                        <p class="card-body">
+                            <?php 
+                                echo $descritivo;
+                            ?>
+                        </p>
+                        </div>
                     </div>
                 </div>
             </main>
@@ -142,15 +168,15 @@
                         <div id="p_col">
                             <ul>
                                 <li><a href="#topo">Topo</a></li>
-                                <li><a href="../../home..php">Home</a></li>
-                                <li><a href="../../conta/perfil.php">Conta</a></li>
-                                <li><a href="../filmes.php">Filmes</a></li>
+                                <li><a href="../home.php">Home</a></li>
+                                <li><a href="../conta/entrar.php">Conta</a></li>
                             </ul>
                         </div>
                         <div id="s_col">
                             <ul>
-                                <li><a href="../livros.php">Livros</a></li>
-                                <li><a href="../séries.php">Séries</a></li>
+				                <li><a href="produtos.php?cod=1">Filmes</a></li>
+                                <li><a href="produtos.php?cod=2">Livros</a></li>
+                                <li><a href="produtos.php?cod=3">Séries</a></li>
                             </ul>
                         </div>
                     </div>
@@ -281,3 +307,7 @@
         alert(busca.value);
     }
 </script>
+
+<?php
+    $conexao->close ();
+?>
