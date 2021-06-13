@@ -83,20 +83,20 @@
                 <div id="conteudo" class="cad">
                     <p>Cadastrar</p>
                     <div id="form">
-                        <form class="row g-3">
+                        <form class="row g-3" method="POST" action="criarCliente.php">
                             <div class="col-md-6">
                                 <label for="txtNome" class="form-label">Nome</label>
-                                <input type="text" maxlength="30" class="form-control" id="txtNome" placeholder="Digite seu nome de usuário" required /> <br/>                          
+                                <input name="nome" type="text" maxlength="30" class="form-control" id="txtNome" placeholder="Digite seu nome de usuário" required /> <br/>                          
                             </div>
 			     <br/>
                             <div class="col-md-6">
                                 <label for="txtEmail" class="form-label">Email</label>
-                                <input type="email" maxlength="30" class="form-control" id="txtEmail" placeholder="Digite seu email" required />
+                                <input name="email" type="email" maxlength="30" class="form-control" id="txtEmail" placeholder="Digite seu email" required />
                             </div>
 			    <br/>
                             <div class="col-md-6">
                                 <label for="txtSenha" class="form-label">Senha</label>
-                                <input type="password" minlength="8" maxlength="30" class="form-control" id="txtSenha" placeholder="Digite uma senha" required />
+                                <input name="senha" type="password" minlength="8" maxlength="30" class="form-control" id="txtSenha" placeholder="Digite uma senha" required />
                             </div>
                             <div class="col-md-4">
                                 <label for="cSenha" class="form-label">Confirmar senha</label>
@@ -105,7 +105,7 @@
                             <br/>
 			    <div class="col-md-4">
                                 <label for="txtTelefone" class="form-label">Telefone</label>
-                                <input type="text" pattern="[0-9]{8,9}" class="form-control" id="txtTelefone" minlength="8" maxlength="9" placeholder="Digite seu número de telefone" required />
+                                <input name="fone" pattern="[0-9]{8,9}" type="text" class="form-control" id="txtTelefone" minlength="8" maxlength="9" placeholder="Digite seu número de telefone" required />
                             </div>
                              <br/>
                                <div class="col-12">
