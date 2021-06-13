@@ -1,3 +1,10 @@
+<?php
+    if (isset ($_GET["cod"])) {
+        if ($_GET["cod"]==200)
+            echo "<script>alert ('Usuário criado com sucesso!');</script>";
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
