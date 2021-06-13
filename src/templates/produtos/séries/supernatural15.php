@@ -1,3 +1,14 @@
+<?php
+
+    session_start ();
+
+    if (isset ($_SESSION["codCliente"])) {
+        $cliente = $_SESSION["cliente"];
+        $codigo = $_SESSION["codCliente"];
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -28,7 +39,7 @@
                     <div id="menu_superior_esquerda">
                         <a href="../../home.php">
                             <img src="../../../../assets/images/icons/logo_icone.svg" type="image/svg" alt="Logomarca" />
-                            Cine Wolrd
+                            Cine World
                         </a>
                     </div>
                     <div id="menu_superior_direita">
@@ -40,7 +51,12 @@
                         </span>
                         <a href="../../conta/entrar.php">
                             <img src="../../../../assets/images/icons/account_circle_black_24dp.svg" type="image/svg" alt="Ícone do usuário" />
-                            Login
+                            <?php
+                                if (isset ($codigo))
+                                    echo $cliente;
+                                else
+                                    echo "Login";
+                            ?>
                         </a>
                     </div>
                 </div>
@@ -67,8 +83,13 @@
                             <div class="dropdown">
                                 <a class="nav-link btn dropdown-toggle" href="#" role="button" id="dropdownConta" data-bs-toggle="dropdown" aria-expanded="false">Conta</a>
                                 <ul id="lista_usuario" class="dropdown-menu" aria-labelledby="dropdownConta">
-                                    <li><a class="dropdown-item" href="../../conta/entrar.php">Entrar</a></li>
-                                    <li><a class="dropdown-item" href="#">Sair</a></li>
+                                <?php 
+                                    if (isset ($codigo))
+                                        echo "<li><a class='dropdown-item' href='../../conta/logout.php'>Sair</a></li>";
+                                    else
+                                        echo "<li><a class='dropdown-item' href='../../conta/entrar.php'>Entrar</a></li>";
+
+                                ?>
                                 </ul>
                             </div>
                         </li>
@@ -135,7 +156,6 @@
                             <ul>
                                 <li><a href="#topo">Topo</a></li>
                                 <li><a href="../../home.php">Home</a></li>
-                                <li><a href="../../conta/perfil.php">Conta</a></li>
                                 <li><a href="../filmes.php">Filmes</a></li>
                             </ul>
                         </div>

@@ -1,7 +1,18 @@
 <?php
+
+    session_start ();
+
+    if (isset ($_SESSION["codCliente"])) {
+        $cliente = $_SESSION["cliente"];
+        $codigo = $_SESSION["codCliente"];
+    }
+
     if (isset ($_GET["cod"])) {
-        if ($_GET["cod"]==200)
-            echo "<script>alert ('Usuário criado com sucesso!');</script>";
+       
+        switch ($_GET["cod"]) {
+            case 200: echo "<script>alert ('Usuário criado com sucesso!');</script>"; break;
+            case 401: echo "<script>alert ('Informações de credenciais inválidas!');</script>";
+        }
     }
 ?>
 
@@ -11,12 +22,12 @@
     <head>
         <meta charset="utf-8" />
         <title>Cine World</title>
-	 <link rel="shortcut icon" href="../../assets/images/icons/logo_icone.svg" type="image/svg" />
+	    <link rel="shortcut icon" href="../../assets/images/icons/logo_icone.svg" type="image/svg" />
 
-	<meta name="description" content="Home do Cine Wolrd, o mundo do cinema como você nunca viu e na sua mão" />
-	<meta name="keywords" content="filme livro série " />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	 <link rel="stylesheet" href="../styles/estilos.css" />
+        <meta name="description" content="Home do Cine Wolrd, o mundo do cinema como você nunca viu e na sua mão" />
+        <meta name="keywords" content="filme livro série " />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="../styles/estilos.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
         <!-- Inserção do Bootstrap -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
@@ -25,7 +36,7 @@
         <!-- Lora -->
         <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
 
-</head>
+    </head>
 
         <div class="container-fluid px-0">
             <header>
@@ -33,7 +44,7 @@
                     <div id="menu_superior_esquerda">
                         <a href="home.php">
                             <img src="../../assets/images/icons/logo_icone.svg" type="image/svg" alt="Logotipo" />
-                            Cine Wolrd
+                            Cine World
                         </a>
                     </div>
                     <div id="menu_superior_direita">
@@ -45,7 +56,12 @@
                         </span>
                         <a href="conta/entrar.php">
                             <img src="../../assets/images/icons/account_circle_black_24dp.svg" type="image/svg" alt="Ícone do usuário" />
-                            Login
+                            <?php
+                                if (isset ($codigo))
+                                    echo $cliente;
+                                else
+                                    echo "Login";
+                            ?>
                         </a>
                     </div>
                 </div>
@@ -72,8 +88,13 @@
                             <div class="dropdown">
                                 <a class="nav-link btn dropdown-toggle" href="#" role="button" id="dropdownConta" data-bs-toggle="dropdown" aria-expanded="false">Conta</a>
                                 <ul id="lista_usuario" class="dropdown-menu" aria-labelledby="dropdownConta">
-                                    <li><a class="dropdown-item" href="conta/entrar.php">Entrar</a></li>
-                                    <li><a class="dropdown-item" href="#">Sair</a></li>
+                                <?php 
+                                    if (isset ($codigo))
+                                        echo "<li><a class='dropdown-item' href='conta/logout.php'>Sair</a></li>";
+                                    else
+                                        echo "<li><a class='dropdown-item' href='conta/entrar.php'>Entrar</a></li>";
+
+                                ?>
                                 </ul>
                             </div>
                         </li>
