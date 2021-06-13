@@ -26,6 +26,8 @@
 
         mail ($para, $assunto, $mensagem, $header);
 
+        $conexao->close ();
+
         return true;
     }
 ?>
