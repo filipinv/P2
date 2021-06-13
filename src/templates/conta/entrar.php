@@ -1,3 +1,15 @@
+<?php
+
+    session_start ();
+
+    if (isset ($_SESSION["codCliente"])) {
+        $cliente = $_SESSION["cliente"];
+        $codigo = $_SESSION["codCliente"];
+        header ("location: ../home.php");
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -42,7 +54,12 @@
                         </span>
                         <a href="entrar.php">
                             <img src="../../../assets/images/icons/account_circle_black_24dp.svg" type="image/svg" alt="Ícone do usuário" />
-                            Login
+                            <?php
+                                if (isset ($codigo))
+                                    echo $cliente;
+                                else
+                                    echo "Login";
+                            ?>
                         </a>
                     </div>
                 </div>
@@ -69,8 +86,13 @@
                             <div class="dropdown">
                                 <a class="nav-link btn dropdown-toggle" href="#" role="button" id="dropdownConta" data-bs-toggle="dropdown" aria-expanded="false">Conta</a>
                                 <ul id="lista_usuario" class="dropdown-menu" aria-labelledby="dropdownConta">
-                                    <li><a class="dropdown-item" href="entrar.php">Entrar</a></li> 
-                                    <li><a class="dropdown-item" href="#">Sair</a></li>
+                                <?php 
+                                    if (isset ($codigo))
+                                        echo "<li><a class='dropdown-item' href='conta/logout.php'>Sair</a></li>";
+                                    else
+                                        echo "<li><a class='dropdown-item' href='conta/entrar.php'>Entrar</a></li>";
+
+                                ?>
                                 </ul>
                             </div>
                         </li>
@@ -81,17 +103,17 @@
             <main>
                 <div id="conteudo" class="cont">
                     <div class="entrar">
-                        <form>
+                        <form action="login.php" method="POST">
                             <div class="form-group">
-                               <label for="txtUsuario">Login</label>
-                               <input type="text" maxlength="30" class="form-control" id="txtUsuario" placeholder="Digite seu email ou nome de usuário" required/>
+                               <label for="txtUsuario">Email</label>
+                               <input name="email" type="text" maxlength="30" class="form-control" id="txtUsuario" placeholder="Digite seu email ou nome de usuário" required/>
                             </div>
                             <br />
                             <div class="form-group">
                                 <label for="txtSenha">Senha</label>
-                                <input type="password" maxlength="30" class="form-control" id="txtSenha" placeholder="Digite sua senha" aria-labelledby="senhaAjuda" required/>
+                                <input name="senha" type="password" maxlength="30" class="form-control" id="txtSenha" placeholder="Digite sua senha" aria-labelledby="senhaAjuda" required/>
                             </div>
-                            <button id="btn_entrar" type="submit" class="btn btn-lg btn-block">Entrar</button>
+                            <button name="btnEntrar" id="btn_entrar" type="submit" class="btn btn-lg btn-block">Entrar</button>
 
                         </form>
                         <button id="btn_esqueci" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#esqueciSenha">
