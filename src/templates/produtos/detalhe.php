@@ -1,4 +1,6 @@
 <?php
+
+    require ('../../classes/produto.php');
     
     session_start ();
 
@@ -24,10 +26,7 @@
 
         $linha = $resultado->fetch_assoc ();
 
-        $titulo = $linha["titulo"];
-        $descritivo = $linha["descritivo"];
-        $valor = $linha["valor"];
-        $imagem = $linha["imagem"];
+        $produto = new Produto ($linha["titulo"], $linha["descritivo"], $linha["valor"], $linha["imagem"]);
     }
     catch (Exception $e) {
         echo $e->getMessage ();
@@ -125,9 +124,9 @@
 
             <main>
                 <div id="conteudo">
-                    <p style="text-align: center;"><?php echo $titulo; ?></p>
+                    <p style="text-align: center;"><?php echo $produto->getTitulo (); ?></p>
                     <div class="pri_col">
-                        <img src="<?php echo $imagem; ?>" type="image/jpg" alt="Duro de Matar" />
+                        <img src="<?php echo $produto->getImagem (); ?>" type="image/jpg" alt="Duro de Matar" />
                     </div>
                     <div class="seg_col">
                         <div class="card">
@@ -135,7 +134,7 @@
                                Detalhes
                             </div>
                             <div class="card-body" style="background-color: #81b3ac;">
-                                <h5 class="card-title">Preço: R$ <?php echo $valor; ?></h5>
+                                <h5 class="card-title">Preço: R$ <?php echo $produto->getValor (); ?></h5>
                                 <form> 
                                       <label class="form-label" >Frete: Grátis </label><br />
 				      <label class="form-label" for="qntdComprar">Quantidade: </label>
@@ -154,7 +153,7 @@
                         </p>
                         <p class="card-body">
                             <?php 
-                                echo $descritivo;
+                                echo $produto->getDescritivo ();
                             ?>
                         </p>
                         </div>
