@@ -1,13 +1,42 @@
 <?php
 
     session_start ();
+    $sessID = session_id ();
 
     if (isset ($_SESSION["codCliente"])) {
         $cliente = $_SESSION["cliente"];
         $codigo = $_SESSION["codCliente"];
     }
-    else
+    else {
         header ("location: home.php");
+        exit ();
+    }
+
+    if (isset ($_GET["cod"])) {
+
+        $codProd = $_GET["cod"];
+        $qntd = $_GET["qtd"];
+
+        try {
+            $conexao = new mysqli ("localhost", "root", "", "cineworld");
+
+            $sql = "SELECT p.valor FROM produto p WHERE p.codigo=$codProd;";
+
+            $resultado = $conexao->query ($sql);
+            $linha = $resultado->fetch_assoc ();
+
+            $valUni = $linha["valor"];
+
+            $sql = "INSERT INTO carrinho VALUES ('$sessID', $codigo, $codProd, $qntd, $valUni, $qntd * $valUni);";
+
+            $resultado = $conexao->query ($sql);
+
+            $conexao->close ();
+        }
+        catch (Exception $e) {
+            echo $e->getMessage ();
+        }
+    }
 
 ?>
 
@@ -30,6 +59,12 @@
         <!-- Inclusão de fontes -->
         <!-- Lora -->
         <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
+        <?php 
+            echo "<script>
+                var codCliente = $codigo;
+                var sessao = '$sessID';
+            </script>";
+        ?>
     </head>
 
     <body id="topo">
@@ -100,36 +135,56 @@
             <main>
                 <div id="conteudo">
                     <div id="lista_itens">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Produto</th>
-                                    <th scope="col">Preço</th>
-				    <th scope="col">Qto</th>
-			            <th scope="col">Frete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr scope="row">
-                                    <td>Duro de Matar</td>
-                                    <td>R$ 24,99</td>
-                                    <td>1</td>
-				    <td>Grátis</td>
-                                </tr>
-                                <tr scope="row">
-                                    <td>Supernatural (15ª temporada) </td>
-                                    <td>R$ 34,80</td>
-				    <td>1</td>
-                                    <td>Grátis</td>
-                                </tr>
-                                <tr scope="row">
-                                    <td>Game Of Thrones (8ª temporada)</td>
-                                    <td>R$ 64,99</td>
-				    <td>1</td>
-                                    <td>R$ 5,99</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                            <?php 
+
+                                $valorTotal = 0;
+
+                                try {
+                                    $conexao = new mysqli ("localhost", "root", "", "cineworld");
+
+                                    $sql = "SELECT p.titulo, c.valorTotal, c.quantidade 
+                                    FROM produto p INNER JOIN carrinho c ON c.codigoProduto=p.codigo
+                                    WHERE c.sessionID LIKE '%$sessID%' AND c.codigoCliente=$codigo;";
+
+                                    $resultado = $conexao->query ($sql);
+
+                                    if ($resultado->num_rows > 0) {
+
+                                        echo "<table class='table'>
+                                            <thead>
+                                                <tr>
+                                                    <th scope='col'>Produto</th>
+                                                    <th scope='col'>Preço</th>
+                                                    <th scope='col'>Qto</th>
+                                                </tr>
+                                            </thead>
+                                        <tbody>";
+
+                                        while ($linha = $resultado->fetch_assoc ()) {
+
+                                            $titulo = $linha["titulo"];
+                                            $valUni = $linha["valorTotal"];
+                                            $qntd = $linha["quantidade"];
+
+                                            $valorTotal += $valUni;
+
+                                            echo " <tr scope='row'>
+                                                        <td>$titulo</td>
+                                                        <td>R$ $valUni</td>
+                                                        <td>$qntd</td>
+                                                    </tr>
+                                            ";
+                                        }
+                                        echo "</tbody>
+                                        </table>";
+                                    }
+                                    else
+                                        echo "<p>Nenhum produto no carrinho!</p>";
+                                }
+                                catch (Exception $e) {
+                                    echo $e->getMessage ();
+                                }
+                            ?>
                     </div>
                     <div id="preco_total">
                         <div class="card">
@@ -137,8 +192,8 @@
                                 Compra 
                             </div>
                             <div class="card-body"> 
-                                <p class="card-text" style="background-color: ##81b3ac;">Preço Total: R$ 130,77</p>
-                                <a target="new" href="carrinho/carrinho2.php" class="btn" style="background-color: red;">Limpar</a>
+                                <p class="card-text" style="background-color: ##81b3ac;">Preço Total: R$ <?php echo $valorTotal; ?></p>
+                                <button onclick="limpar(sessao, codCliente);" class="btn" style="background-color: red;">Limpar</button>
                                 <a href="#" class="btn" style="background-color: yellow;">Finalizar</a>
                             </div>
                         </div>
@@ -146,13 +201,10 @@
             </main>
 
             <footer>
-		<div id="rodape" class="home_rodape">
-                <div id="conteudo_rodape">
+		        <div id="rodape" class="home_rodape">
+                    <div id="conteudo_rodape">
                         <div id="p_col">
-                              <ul>
-
-
-                            </ul>
+                              <ul></ul>
                         </div>
                         <div id="s_col">
                             <ul>
@@ -278,3 +330,23 @@
         alert(busca.value);
     }
 </script>
+
+<script lang="javascript">
+    function limpar(sessao, cliente) {
+        $.ajax ({
+            method: "POST",
+            url: "limpar.php",
+            data: {
+                cliente: cliente,
+                sessao: sessao
+            },
+            async: false
+        }).done (function (res) {
+            window.location.href = window.location.href.split("?")[0];
+        })
+    }
+</script>
+
+<?php 
+    $conexao->close ();
+?>
