@@ -135,11 +135,12 @@
                             </div>
                             <div class="card-body" style="background-color: #81b3ac;">
                                 <h5 class="card-title">Preço: R$ <?php echo $produto->getValor (); ?></h5>
-                                <form> 
-                                      <label class="form-label" >Frete: Grátis </label><br />
-				      <label class="form-label" for="qntdComprar">Quantidade: </label>
-				      <input type="number" min="0" max="99" step="1" id="qntdComprar" /> <br />
-				    <button type="submit" class="btn mt-3" style="background-color: yellow;">Comprar</button>
+                                <form action="../carrinho.php" method="GET"> 
+                                    <label class="form-label" >Frete: Grátis </label><br />
+				                    <label class="form-label" for="qntdComprar">Quantidade: </label>
+				                    <input name="qtd" value="0" type="number" min="0" max="99" step="1" id="qntdComprar" /> <br />
+				                    <button type="submit" class="btn mt-3" style="background-color: yellow;">Comprar</button>
+                                    <input name="cod" type="text" value="<?php echo $codProd;?>" style="visibility: hidden; position: absolute;" />
                                 </form>
                             </div>
                         </div>
